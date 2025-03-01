@@ -25,6 +25,11 @@ const updateItems = (items, item, quantityChange) => {
     return [...items, { ...item, quantity: 1 }];
 };
 
+//function to switch the cart
+const switchCart = (state, payload) => {
+    return payload !== undefined ? payload : !state;
+}
+
 const productsSlice = createSlice({
     //nombre del Slice y estado inicial del contenedor de productos y el carrito cerrado
     name: 'products',
@@ -41,8 +46,8 @@ const productsSlice = createSlice({
         removeProduct: (state, action) => {
             state.products = updateItems(state.products, { id: action.payload }, -1);
         },
-        toggleCart: (state) => {
-            state.isOpen = !state.isOpen
+        toggleCart: (state, action) => {
+            state.isOpen = switchCart(state.isOpen, action.payload);
         }
     },
     extraReducers: builder => {

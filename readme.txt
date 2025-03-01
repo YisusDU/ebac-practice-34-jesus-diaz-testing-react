@@ -117,5 +117,36 @@ dado que la app completa está envuelta en un provider, tambien tenemos que envo
         además verificamos con una funcion mock que al hacer click en el svg, se llama la función toggleCart, para eso debemos simular el dispatch en la prueba, lo hacemos al principio
         ahora hacemos un beforeEach del render y el mockStore, para evitar repetir código
 
+        migrar del render en cada prueba al beforeEach ha sido desafiante, parece que react o jest no reconoce correctamente mi svg, por lo que me da error
+            pero en la pagina de svg viewer ví que hay un formato en react, que es tal cual un componente, vamos a añadirlo como componente extra dentro de la misma carpeta del header
+        ese no era el problema, sino más bien que para hacer el mock de las funciones, tenía que envolverlas tambien en el beforeEach y dejarlas aisladas de el, además de cuidar que no se reendericen 
+        demasiados items del mismo tipo y estilo al que estoy apuntando con el getByText o similar
+    
+    2 Pruebas del componente Cart
+        En Cart hicimos un mock global de redux fuera del describe
+        enseguida definimos varibles que utilizamos para mockear funciones del estado del diversas funciones
+        dichas funciones las utilizamos dentro de un beforeEach que nos ayuda a repetir menos código
+            --se prueba:
+                -renderizado del componente Cart por medio del texto Your Cart
+                -validación del estado inicial del carte con la leyenda your cart is empty
+                -validacion de que se muestra el numero correcto de elementos agregados al carrito
+                -validacion de que al hacer click en el boton remove de un item, se llama la función handleRemove
+                -validacion de la llamada a la funcion toggleCart cuando se clickea el boton close
+        -vamos a validar el estado del carrito, si está abierto o cerrado 
+            para ello definimos la variable en el beforeEach isOpen
+            al revizar el reducer de toggleCart nos dimos cuenta de que no está deifinido el payload, que es por el cual nos estamos basando para hacer la decision de que 
+            accion despachar en el mock de redux,useDispatch
+                procedemos a modificar el slice
+                    añadimos una funcion llamada switchCart que regresa el payload y el estado contrario del carrito para que alterne entre abierto y cerrado
+                    modificamos el reducer para que mande dos parametros a la funcion switchCart  
+                volvemos a Cart.test
+                    definimos isOpen den el beforeEach y lo asignamos al mockStore con el valor de falso
+                    definimos isOpen como jest.fn() para mockearlo 
+                    hacemos un console.log con templates para verificar el estado de isOpen
+                        debería ser false
+                        quería hacer que se llame la función real, pero como estamos mockeando, tenemos que hacer el cambio de false a true manualmente
+                        actualizamos el estado con state = mockStore.getState();
+                        despues de hacer click debería ser true
+                        verificamos que se llame la funcion handleToggleCart
 
-        No se muestra contenido adicional.
+
