@@ -149,7 +149,11 @@ dado que la app completa está envuelta en un provider, tambien tenemos que envo
                         despues de hacer click debería ser true
                         verificamos que se llame la funcion handleToggleCart
             olvida la parte el payload en el estado del carrito, la eliminé y sigue funcionado, podemos acceder al action por su tipo
-                pase todas las funciones que se pruban como props y las definií en App, preferiria definirlas dentro de cada componente, pero es la forma en que
+                pase todas las funciones que se prueban como props y las definií en App, preferiria definirlas dentro de cada componente, pero es la forma en que
                 funciona la prueba
+            dado que la prueba de verificar la llamada de handleToggleCart y verificar si el estado del carrito es abierto o cerrado, aprendí un truco, encerramos ambas funciones
+            en una tercera funcion a modo de callback, pero funciona
+
+            ahora estamos refactorizando las pruebas del header 
 
 

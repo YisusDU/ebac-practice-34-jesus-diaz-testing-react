@@ -105,7 +105,7 @@ describe("cart", () => {
     it("should to call the removeProduct function", () => {
         const buttonRemove = screen.getAllByRole("button", { name: /Remove-Item/ });
         fireEvent.click(buttonRemove[0]);
-        
+
         // Define state after the click action
         expect(handleRemove).toHaveBeenCalled();
         expect(handleRemove).toHaveBeenCalledTimes(1);
@@ -116,15 +116,15 @@ describe("cart", () => {
         const closeButton = screen.getByText("X");
         console.log("Close button found:", prettyDOM(closeButton));
         expect(closeButton).toBeInTheDocument();
-    
+
         // check if the handleToggleCart function is defined
         console.log("handleToggleCart function:", handleToggleCart);
         expect(handleToggleCart).toBeDefined();
-    
+
         // Click the cart icon
         fireEvent.click(closeButton);
         console.log("Clicked close button");
-    
+
         // Check if the toggleCart function was called
         expect(handleToggleCart).toHaveBeenCalled();
         expect(handleToggleCart).toHaveBeenCalledTimes(1);
@@ -134,15 +134,15 @@ describe("cart", () => {
         // Check if the cart is closed
         let state = store.getState();
         expect(state.cart.isOpen).toBe(false);
-    
+
         // Simulate the click on the close button
         const closeButton = screen.getByText("X");
         fireEvent.click(closeButton);
-    
+
         // Verify the state after the click
         state = store.getState(); // Re-fetch the state after the click
         console.log(`isOpen after click: ${state.cart.isOpen}`);
-        expect(state.cart.isOpen).toBe(true); 
+        expect(state.cart.isOpen).toBe(true);
     });
 
     it('should have accessible roles and attributes', () => {
@@ -152,5 +152,5 @@ describe("cart", () => {
         removeButtons.forEach(button => {
             expect(button).toHaveAttribute('aria-label', 'Remove-Item');
         });
-    }); 
+    });
 });

@@ -29,7 +29,7 @@ function App() {
 
   return (
     <>
-      <ProductHeader />
+      <ProductHeader handleAddToCart={handleAddToCart}/>
       <ProductsList handleAddToCart={handleAddToCart}/>
       <Cart handleRemove={handleRemove} handleToggleCart={handleToggleCart} isOpen={isOpen}/>
     </>

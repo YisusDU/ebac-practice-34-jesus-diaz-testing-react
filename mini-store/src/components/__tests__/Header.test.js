@@ -4,43 +4,49 @@ import Header from "../header/index.js";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { prettyDOM } from "@testing-library/dom";
-import * as redux from 'react-redux';
 import productsReducer from "../../state/products.slice.js";
 
 
 
 describe("Header", () => {
     let store;
-    let component;
     let toggleCart;
-    beforeEach(()=> {
-        store = configureStore({}
-        ));
-        toggleCart = jest.fn();
-        
-        component = render(
+    beforeEach(() => {
+        handleToggleCart = jest.fn();
+
+        store = configureStore({
+            reducer: {
+                cart: productsReducer,
+            },
+            preloadedState: {
+                isOpen: false,
+                cart: {
+                    products: [
+                        { id: 1, quantity: 1, price: 10, name: "Product 1" },
+                        { id: 2, quantity: 1, price: 10, name: "Product 2" },
+                    ],
+                },
+            },
+        });
+
+
+        render(
             <Provider store={store}>
-                <Header />
+                <Header handleToggleCart={handleToggleCart} />
             </Provider>
         );
     })
 
     it("renders the header", () => {
-        
         // Variable that renders the header title
         const title = screen.getByText("Mini-Store -- v 2.0");
+        console.log("title of the header" + prettyDOM(title));
 
         // Rendering the header title
         expect(title).toBeInTheDocument();
     });
 
     it("should contain the svg ", () => {
-        
-        // Set up mock function for toggleCart and log dispatch
-        //console.log("Setting up mock for useDispatch");
-
-        const toggleCart = jest.fn();
-        redux.useDispatch.mockReturnValue(toggleCart); // Mock useDispatch to return toggleCart
 
         // Variable that contains the cart icon
         const cartIcon = screen.getByRole("img");
@@ -50,51 +56,70 @@ describe("Header", () => {
     });
 
     it("should call the toggleCart function when the cart icon is clicked", () => {
-        // Set up mock function for toggleCart and log dispatch
-        //console.log("Setting up mock for useDispatch");
 
         // Variable that contains the cart icon
         const cartIcon = screen.getByRole("img");
+        console.log("Header_cartIcon:" + prettyDOM(cartIcon));
 
         // Click the cart icon
         fireEvent.click(cartIcon);
-
         // Check if the toggleCart function was called
-        expect(toggleCart).toHaveBeenCalled();
-        expect(toggleCart).toHaveBeenCalledTimes(1);
+        expect(handleToggleCart).toHaveBeenCalled();
+        expect(handleToggleCart).toHaveBeenCalledTimes(1);
     });
 
     it("should display the correct number of items in the cart", () => {
 
-        const span = component.container.querySelector("span");
-        const cartCount = screen.getByRole("button");
-        //console.log(prettyDOM(span));
-        
-        expect(span).toBeInTheDocument();
-        expect(cartCount).toHaveTextContent("2");
-        
-    }); 
+        let cartCount = screen.getByRole("button");
+        console.log("Quantity of products:" + prettyDOM(cartCount));
 
-    
+        expect(cartCount).toBeInTheDocument();
+        expect(cartCount).toHaveTextContent("2");
+
+    });
+
+
     it("should display '0' when the cart is empty", () => {
-        mockStore = createStore(() => ({
-            cart: { products: [] }
-        }));
-        component = render(
-            <Provider store={mockStore}>
+        store = configureStore({
+            reducer: {
+                cart: productsReducer,
+            },
+            preloadedState: {
+                isOpen: false,
+                cart: {
+                    products: [],
+                },
+            },
+        });
+        render(
+            <Provider store={store}>
                 <Header />
             </Provider>
         );
+        const state = store.getState();
         const cartCount = screen.getAllByRole("button");
+        console.log("button cart empty:" + prettyDOM(cartCount[1]));
+
         expect(cartCount[1]).toHaveTextContent("0");
+        expect(state.cart.products.length).toBe(0);
     });
 
     it("should display '1' when there is one item in the cart", () => {
-        mockStore = createStore(() => ({
-            cart: { products: [{ id: 1, quantity: 1 }] }
-        }));
-        component = render(
-            <Provider store={mockStore}>
+        store = configureStore({
+            reducer: {
+                cart: productsReducer,
+            },
+            preloadedState: {
+                isOpen: false,
+                cart: {
+                    products: [
+                        { id: 1, quantity: 1, price: 10, name: "Product 1" },
+                    ],
+                },
+            },
+        });
+        render(
+            <Provider store={store}>
                 <Header />
             </Provider>
         );
@@ -106,8 +131,8 @@ describe("Header", () => {
         const cartIcon = screen.getByRole("img");
         expect(cartIcon).toHaveAttribute("alt", "cart-icon");
         const cartButton = screen.getByRole("button");
-        expect(cartButton).toHaveAttribute("aria-label", "Cart");
-    });
+        expect(cartButton).toHaveAttribute("aria-label", "Cart-Count");
+    }); 
 });
 
 
