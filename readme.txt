@@ -148,5 +148,8 @@ dado que la app completa está envuelta en un provider, tambien tenemos que envo
                         actualizamos el estado con state = mockStore.getState();
                         despues de hacer click debería ser true
                         verificamos que se llame la funcion handleToggleCart
+            olvida la parte el payload en el estado del carrito, la eliminé y sigue funcionado, podemos acceder al action por su tipo
+                pase todas las funciones que se pruban como props y las definií en App, preferiria definirlas dentro de cada componente, pero es la forma en que
+                funciona la prueba
 
 

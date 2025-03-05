@@ -15,8 +15,9 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts',
 })
 
 // Función para actualizar la cantidad de items en el carrito
-const updateItems = (items, item, quantityChange) => {
+const updateItems = (items = [], item, quantityChange) => {
     const index = items.findIndex(i => i.id === item.id);
+
     if (index >= 0) {
         const updatedItems = [...items];
         updatedItems[index] = { ...updatedItems[index], quantity: updatedItems[index].quantity + quantityChange };
@@ -25,20 +26,17 @@ const updateItems = (items, item, quantityChange) => {
     return [...items, { ...item, quantity: 1 }];
 };
 
-//function to switch the cart
-const switchCart = (state, payload) => {
-    return payload !== undefined ? payload : !state;
-}
 
 const productsSlice = createSlice({
     //nombre del Slice y estado inicial del contenedor de productos y el carrito cerrado
     name: 'products',
     initialState: {
-        isOpen: false,
         products: [],
         stock: [],
-        status: IDLE
+        status: IDLE,
+        isOpen: false,
     },
+
     reducers: {
         addProduct: (state, action) => {
             state.products = updateItems(state.products, action.payload, 1);
@@ -46,8 +44,8 @@ const productsSlice = createSlice({
         removeProduct: (state, action) => {
             state.products = updateItems(state.products, { id: action.payload }, -1);
         },
-        toggleCart: (state, action) => {
-            state.isOpen = switchCart(state.isOpen, action.payload);
+        toggleCart: (state) => {
+            state.isOpen = !state.isOpen;
         }
     },
     extraReducers: builder => {

@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreContainer, ProductsArray, Product, LoadingOrError } from './styles.js';
-import { addProduct, fetchProducts } from '../../state/products.slice';
+import { fetchProducts } from '../../state/products.slice';
 import { FAILED, IDLE, LOADING, SUCCEDED } from '../../state/status';
 
 
-const ProductsList = () => {
+ 
+
+
+const ProductsList = ({handleAddToCart}) => {
     const dispatch = useDispatch();
     const products = useSelector((state) => state.cart.stock);
     const status = useSelector((state) => state.cart.status);
+    
 
 
     //usamos useEffect para manejar la asincronicidad
@@ -16,16 +20,7 @@ const ProductsList = () => {
         status === IDLE && dispatch(fetchProducts())
     }, [dispatch, status])
 
-
-    // Manejar la acción de agregar al carrito
-    const handleAddToCart = (product) => {
-        dispatch(addProduct({
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image: product.image
-        }));
-    };
+   
 
     return (
         <StoreContainer>

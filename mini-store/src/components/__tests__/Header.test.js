@@ -1,30 +1,25 @@
-import React, { useSelector} from "react";
+import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import Header from "../header/index.js";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import { prettyDOM } from "@testing-library/dom";
 import * as redux from 'react-redux';
+import productsReducer from "../../state/products.slice.js";
 
-// Mock the entire react-redux module
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux'),
-    useDispatch: jest.fn(),
-}));
+
 
 describe("Header", () => {
-    let mockStore;
+    let store;
     let component;
     let toggleCart;
     beforeEach(()=> {
-        mockStore = createStore(() => ({
-            cart: { products: [{ id: 1, quantity: 1 }, { id: 2, quantity: 1 }] }
-        }));
+        store = configureStore({}
+        ));
         toggleCart = jest.fn();
-        redux.useDispatch.mockReturnValue(toggleCart); // Mock useDispatch to return toggleCart
         
         component = render(
-            <Provider store={mockStore}>
+            <Provider store={store}>
                 <Header />
             </Provider>
         );
