@@ -103,31 +103,31 @@ describe("cart", () => {
     });
 
     it("should to call the removeProduct function", () => {
-        const buttonRemove = screen.getAllByRole("button", { name: /Remove-Item/ });
+        const buttonRemove = screen.getAllByRole("button", { name: /remove-Item/ });
         fireEvent.click(buttonRemove[0]);
 
         // Define state after the click action
-        expect(handleRemove).toHaveBeenCalled();
-        expect(handleRemove).toHaveBeenCalledTimes(1);
+        const state = store.getState();
+        expect(state.cart.products.length).toBe(1);
     });
 
     it("should call the toggleCart function when the close icon is clicked", () => {
-        // check if the close button is rendered
+        // Variable that contains the cart icon
         const closeButton = screen.getByText("X");
-        console.log("Close button found:", prettyDOM(closeButton));
-        expect(closeButton).toBeInTheDocument();
-
-        // check if the handleToggleCart function is defined
-        console.log("handleToggleCart function:", handleToggleCart);
-        expect(handleToggleCart).toBeDefined();
 
         // Click the cart icon
         fireEvent.click(closeButton);
         console.log("Clicked close button");
 
-        // Check if the toggleCart function was called
-        expect(handleToggleCart).toHaveBeenCalled();
-        expect(handleToggleCart).toHaveBeenCalledTimes(1);
+        //check if the state has changed
+        const state = store.getState();
+        expect(state.cart.isOpen).toBe(true);
+
+        // Click the cart icon again
+        fireEvent.click(closeButton);
+        const state2 = store.getState();
+        expect(state2.cart.isOpen).toBe(false);
+
     });
 
     it("should to check if the cart is open or closed", () => {
@@ -145,12 +145,47 @@ describe("cart", () => {
         expect(state.cart.isOpen).toBe(true);
     });
 
+    it("should to change the style when CloseButton is clicked", () => {
+        const component = render(
+            <Provider store={store}>
+                <Cart handleRemove={handleRemove} handleToggleCart={handleToggleCart} isOpen={isOpen} />
+            </Provider>
+        )
+        const closeButton = component.getAllByText("X");
+        //parentElement
+        const parentElement = closeButton[1].parentNode;
+
+        //Get the styles for parentElement
+        const parentStyles = window.getComputedStyle(parentElement);
+        console.log("ParentElement Styles:" + JSON.stringify(parentStyles));
+
+        expect(parentElement).toHaveStyle('right: -100%');
+
+
+        //simulated some click
+        fireEvent.click(closeButton[1]);
+
+        const { rerender } = component;
+        rerender(
+            <Provider store={store}>
+                <Cart handleRemove={handleRemove} handleToggleCart={handleToggleCart} isOpen={isOpen} />
+            </Provider>
+        );
+        //update the components styles
+        const updatedParentStyles = window.getComputedStyle(parentElement);
+        console.log("Updated ParentElement Styles:", JSON.stringify(updatedParentStyles));
+
+        //should change the styles
+        expect(parentElement).toHaveStyle('right: 20px');
+
+    });
+
     it('should have accessible roles and attributes', () => {
         const closeButton = screen.getByText("X");
-        expect(closeButton).toHaveAttribute('aria-label', 'Close-Cart');
+        expect(closeButton).toHaveAttribute('aria-label', 'close-Cart');
         const removeButtons = screen.getAllByText('Remove');
         removeButtons.forEach(button => {
-            expect(button).toHaveAttribute('aria-label', 'Remove-Item');
+            expect(button).toHaveAttribute('aria-label', 'remove-Item');
         });
     });
 });

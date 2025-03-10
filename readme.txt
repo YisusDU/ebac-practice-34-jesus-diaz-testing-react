@@ -155,5 +155,48 @@ dado que la app completa está envuelta en un provider, tambien tenemos que envo
             en una tercera funcion a modo de callback, pero funciona
 
             ahora estamos refactorizando las pruebas del header 
+                para ello utilizamos la store que configuramos en Cart con el configureStore y le pasamos las props 
+                además utilizamos la funcion handleCloseClick que llama a handleToggleCart que utiliza el dispatch toggleCart
+                 aun no entiendo bien como hacer que la store que esta dentro del beforeEach no se ejecute en una prueba específica
+                 al utilizar el comando coverge nos enteramos de que falta por provar cosas en el cart
+añadimos una prueba de atributos a productList
+Hemos subido el porcentage de covertura en Cart, y notado que en productList, no falta verificar el fetch de los prodcutos cuendo el estado es IDLE
+
+despues de hacer varios intentos, no era necesario añadir el middleware ala prueba jajajja
+lo mismo de arriba a la hora de hacer la peticion mockeada con el método similar al del maestro
+
+hicimos las pruebas para el slice, no fue tan dificil, era mucho sproud de los items y el stado inicial
+
+el coverge dice que nos falta probar el error del try catch en el fetchProducts
+
+5. Pruebas del componente App
+--me cambie a utilizar el editor de codigo Trae de tik tok
+    Archivo: tests/App.test.js
+
+    Objetivo: Probar el flujo general de la aplicación de manera simplificada.
+
+    Pruebas sugeridas:
+
+        La aplicación renderiza los componentes Header, SearchBar, SearchResults y Library.
+
+        Simula buscar canciones escribiendo en el input y verifica que los resultados se muestran correctamente.
+
+        Simula agregar una canción a la biblioteca y verifica que aparece en la sección Library.
+
+    Detalles:
+
+        Proporciona funciones simuladas y datos ficticios para cada prueba.
+
+        Usa fireEvent para interactuar con el input y los botones.
+
+yo se que nos habían dicho que usaramos fireEvent para el manejo de errores, pero actualmente se utiliza
+userEvent, que es una forma de interactuar con los componentes de forma mas natural, como si un usuario lo
+haciera
+
+despues de modificar la palabra succeeded en el slice y el status, corregimos todos los lugares donde no se estaba aplicando correctamente
+
+hicimos las pruebas para el componente App, y como se puede ver, se utilizan las funciones simuladas y datos ficticios para cada prueba,
+se reenderizan correctamente los componentes y las funciones básicas como añadir productos al carrito, removerlos y abrir o cerrar el carrito
+funcionan correctamente
 
 

@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import productsReducer from "../state/products.slice"
 
-//no es necesario utilizar combineReducer, pues toolkit lo hacer por default 
+// It is not necessary to use combineReducer, as the toolkit does it by default
+
 
 const store = configureStore({
     reducer: {

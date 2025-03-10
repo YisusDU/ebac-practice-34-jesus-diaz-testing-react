@@ -4,22 +4,21 @@ import { HeaderContainer, HeaderTitle, HeaderCart } from './styles';
 import { toggleCart } from '../../state/products.slice';
 import SVGComponent from './svgHeader';
 
-const ProductHeader = ({handleToggleCart}) => {
+const ProductHeader = () => {
     const products = useSelector((state) => state.cart.products);
     const dispatch = useDispatch();
     const cartItemsCount = products.reduce((total, item) => total + item.quantity, 0);
 
     const handleCloseClick = () => {
-            handleToggleCart();
-            dispatch(toggleCart());
-        };
+        dispatch(toggleCart());
+    };
 
     return (
-        <HeaderContainer>
+        <HeaderContainer >
             <HeaderTitle>Mini-Store -- v 2.0</HeaderTitle>
             <HeaderCart onClick={handleCloseClick}>
-                <SVGComponent alt="cart-icon"/>
-                <span role="button" aria-label='Cart-Count'>{cartItemsCount}</span>
+                <SVGComponent />
+                <span role="button" aria-label='cart-Count'>{cartItemsCount}</span>
             </HeaderCart>
         </HeaderContainer>
     );

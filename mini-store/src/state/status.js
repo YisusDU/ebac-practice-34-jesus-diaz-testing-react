@@ -1,13 +1,14 @@
-//Tenemos estas constantes aqui porque las vamos a reutilizar
+// We have these constants here because we are going to reuse them
+
 
 const IDLE = 'idle';
 const LOADING = 'loading';
-const SUCCEDED = 'succeded';
+const SUCCEEDED = 'succeeded';
 const FAILED = 'failed';
 
 export {
     IDLE,
     LOADING,
-    SUCCEDED,
+    SUCCEEDED,
     FAILED
 }

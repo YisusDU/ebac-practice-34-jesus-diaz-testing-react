@@ -8,10 +8,10 @@ const CartContainer = styled.aside`
     border-radius: 5px;
     width: 300px;
     position: fixed;
-    right: ${props => (props.isOpen ? '20px' : '-100%')};
     top: 60px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease-in-out;
+    right: ${({ isOpen }) => isOpen ? '20px' : '-100%'};
 `;
 
 const CartItem = styled.li`

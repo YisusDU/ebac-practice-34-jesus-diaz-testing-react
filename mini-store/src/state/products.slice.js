@@ -1,21 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { FAILED, IDLE, LOADING, SUCCEDED } from "./status";
+import { FAILED, IDLE, LOADING, SUCCEEDED } from "./status";
 
-//función para manejar la asincronía
-export const fetchProducts = createAsyncThunk('products/fetchProducts', 
-    async () => {
-        try{
-            const response = await axios.get('https://fakestoreapi.com/products');
-            return response.data;
-        } catch(error){
-            console.error('Error Fetching' , error);
-            throw error;
-        }
-})
+// Function to handle asynchronous operations
 
-// Función para actualizar la cantidad de items en el carrito
-const updateItems = (items = [], item, quantityChange) => {
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+    try {
+        const response = await axios.get('https://fakestoreapi.com/products');
+        return response.data;
+    } catch (error) {
+        console.error('Error Fetching', error);
+        throw error; // Asegúrate de lanzar el error de nuevo
+    }
+});
+
+// Function to update the quantity of items in the cart
+
+export const updateItems = (items = [], item, quantityChange) => {
     const index = items.findIndex(i => i.id === item.id);
 
     if (index >= 0) {
@@ -28,7 +29,8 @@ const updateItems = (items = [], item, quantityChange) => {
 
 
 const productsSlice = createSlice({
-    //nombre del Slice y estado inicial del contenedor de productos y el carrito cerrado
+// Name of the Slice and initial state of the products container and the cart closed
+
     name: 'products',
     initialState: {
         products: [],
@@ -57,7 +59,7 @@ const productsSlice = createSlice({
         .addCase(fetchProducts.fulfilled, (state, action) => {
             console.log("fuldilled:", action)
             state.stock = action.payload;
-            state.status = SUCCEDED;
+            state.status = SUCCEEDED;
         })
         .addCase(fetchProducts.rejected, (state, action) => {
             console.log("rejected:", action);
@@ -66,7 +68,8 @@ const productsSlice = createSlice({
     }
 });
 
-//vamos a exportar los reducers y los actions
+// We are going to export the reducers and the actions
+
 export const { addProduct, removeProduct, toggleCart} = productsSlice.actions;
 //Hacemos un destructury:
 const {reducer: productsReducer} = productsSlice;

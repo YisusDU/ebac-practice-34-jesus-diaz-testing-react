@@ -10,23 +10,20 @@ import productsReducer from "../../state/products.slice.js";
 
 describe("Header", () => {
     let store;
-    let toggleCart;
     beforeEach(() => {
         handleToggleCart = jest.fn();
 
         store = configureStore({
             reducer: {
-                cart: productsReducer,
+                cart: productsReducer
             },
             preloadedState: {
-                isOpen: false,
                 cart: {
-                    products: [
-                        { id: 1, quantity: 1, price: 10, name: "Product 1" },
-                        { id: 2, quantity: 1, price: 10, name: "Product 2" },
-                    ],
-                },
-            },
+                    products: [],
+                    stock: [],
+                    status: 'idle'
+                }
+            }
         });
 
 
@@ -56,7 +53,6 @@ describe("Header", () => {
     });
 
     it("should call the toggleCart function when the cart icon is clicked", () => {
-
         // Variable that contains the cart icon
         const cartIcon = screen.getByRole("img");
         console.log("Header_cartIcon:" + prettyDOM(cartIcon));
@@ -64,17 +60,38 @@ describe("Header", () => {
         // Click the cart icon
         fireEvent.click(cartIcon);
         // Check if the toggleCart function was called
-        expect(handleToggleCart).toHaveBeenCalled();
-        expect(handleToggleCart).toHaveBeenCalledTimes(1);
+        const state = store.getState();
+        expect(state.cart.isOpen).toBe(true);
     });
 
     it("should display the correct number of items in the cart", () => {
+        store = configureStore({
+            reducer: {
+                cart: productsReducer
+            },
+            preloadedState: {
+                cart: {
+                    products: [
+                        { id: 1, quantity: 1, price: 10, name: "Product 1" },
+                        { id: 2, quantity: 2, price: 20, name: "Product 2" },
+                    ],
+                    stock: [],
+                    status: 'idle'
+                }
+            }
+        });
 
-        let cartCount = screen.getByRole("button");
-        console.log("Quantity of products:" + prettyDOM(cartCount));
 
-        expect(cartCount).toBeInTheDocument();
-        expect(cartCount).toHaveTextContent("2");
+        render(
+            <Provider store={store}>
+                <Header handleToggleCart={handleToggleCart} />
+            </Provider>
+        );
+        let cartCount = screen.getAllByRole("button");
+        console.log("Quantity of products:" + prettyDOM(cartCount[1]));
+
+        expect(cartCount[1]).toBeInTheDocument();
+        expect(cartCount[1]).toHaveTextContent("3");
 
     });
 
@@ -131,7 +148,7 @@ describe("Header", () => {
         const cartIcon = screen.getByRole("img");
         expect(cartIcon).toHaveAttribute("alt", "cart-icon");
         const cartButton = screen.getByRole("button");
-        expect(cartButton).toHaveAttribute("aria-label", "Cart-Count");
+        expect(cartButton).toHaveAttribute("aria-label", "cart-Count");
     }); 
 });
 
